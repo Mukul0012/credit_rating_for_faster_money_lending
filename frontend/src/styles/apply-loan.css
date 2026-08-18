@@ -1,0 +1,358 @@
+.apply-loan-page {
+  min-height: 100vh;
+  background: #f5f7fb;
+  padding: 38px 42px;
+}
+
+.apply-loan-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.apply-loan-header {
+  margin-bottom: 30px;
+}
+
+.back-button {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin-bottom: 25px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  color: #2563eb;
+}
+
+.apply-eyebrow {
+  display: block;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.apply-loan-header h1 {
+  margin: 8px 0 7px;
+  color: #0f1f38;
+  font-size: 32px;
+  letter-spacing: -0.7px;
+}
+
+.apply-loan-header p {
+  max-width: 680px;
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+
+/* ================================
+   LAYOUT
+================================ */
+
+.apply-layout {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    320px;
+  gap: 22px;
+}
+
+
+/* ================================
+   FORM CARD
+================================ */
+
+.apply-form-card {
+  background: white;
+  border: 1px solid #e6eaf0;
+  border-radius: 14px;
+  padding: 30px;
+  box-shadow:
+    0 3px 10px
+    rgba(15, 23, 42, 0.03);
+}
+
+.apply-card-header {
+  padding-bottom: 22px;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.apply-card-header h2 {
+  margin: 6px 0 0;
+  color: #172033;
+  font-size: 20px;
+}
+
+
+/* ================================
+   FORM
+================================ */
+
+.form-group {
+  margin-bottom: 23px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.form-group small {
+  display: block;
+  margin-top: 7px;
+  color: #94a3b8;
+  font-size: 10px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  box-sizing: border-box;
+  height: 46px;
+  padding: 0 13px;
+  border: 1px solid #dce3ec;
+  border-radius: 8px;
+  outline: none;
+  background: white;
+  color: #172033;
+  font-family: inherit;
+  font-size: 13px;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #2563eb;
+  box-shadow:
+    0 0 0 3px
+    rgba(37, 99, 235, 0.08);
+}
+
+.form-group input:disabled,
+.form-group select:disabled {
+  background: #f8fafc;
+  cursor: not-allowed;
+}
+
+
+/* ================================
+   RUPEE INPUT
+================================ */
+
+.input-with-prefix {
+  position: relative;
+}
+
+.input-with-prefix span {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.input-with-prefix input {
+  padding-left: 34px;
+}
+
+
+/* ================================
+   ERROR
+================================ */
+
+.apply-error {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+}
+
+.apply-error span {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.apply-error p {
+  margin: 1px 0 0;
+  color: #991b1b;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+
+/* ================================
+   BUTTON
+================================ */
+
+.assess-button {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.assess-button:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.assess-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.assess-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.button-spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  margin-right: 7px;
+  vertical-align: -2px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: assess-spin 0.7s linear infinite;
+}
+
+@keyframes assess-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.form-disclaimer {
+  margin: 14px 0 0;
+  color: #94a3b8;
+  font-size: 9px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+
+/* ================================
+   INFO CARDS
+================================ */
+
+.assessment-info {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.info-card {
+  padding: 21px;
+  background: white;
+  border: 1px solid #e6eaf0;
+  border-radius: 12px;
+}
+
+.info-icon {
+  width: 34px;
+  height: 34px;
+  margin-bottom: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.info-card h3 {
+  margin: 0 0 7px;
+  color: #172033;
+  font-size: 13px;
+}
+
+.info-card p {
+  margin: 0;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 850px) {
+
+  .apply-loan-page {
+    padding: 25px 15px;
+  }
+
+  .apply-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .assessment-info {
+    display: grid;
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .apply-loan-header h1 {
+    font-size: 27px;
+  }
+
+  .apply-form-card {
+    padding: 22px;
+  }
+
+  .assessment-info {
+    grid-template-columns: 1fr;
+  }
+
+}

@@ -1,0 +1,1028 @@
+/* =========================================
+   DASHBOARD GLOBAL
+========================================= */
+
+.dashboard-layout {
+  min-height: 100vh;
+
+  background: #f6f8fb;
+
+  color: #172033;
+}
+
+
+/* =========================================
+   MAIN CONTENT
+========================================= */
+
+.dashboard-main {
+  margin-left: 250px;
+
+  width: calc(100% - 250px);
+
+  min-height: 100vh;
+
+  padding: 36px 42px;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.dashboard-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-end;
+
+  gap: 24px;
+
+  margin-bottom: 30px;
+}
+
+.dashboard-header h1 {
+  margin: 7px 0 6px;
+
+  color: #172033;
+
+  font-size: 30px;
+
+  line-height: 1.2;
+
+  letter-spacing: -0.7px;
+}
+
+.dashboard-header p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+.eyebrow {
+  display: block;
+
+  color: #64748b;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.2px;
+}
+
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.primary-button {
+  border: none;
+
+  background: #2563eb;
+
+  color: white;
+
+  padding: 12px 18px;
+
+  border-radius: 9px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.primary-button:hover {
+  background: #1d4ed8;
+
+  transform: translateY(-1px);
+}
+
+.secondary-button {
+  border: 1px solid #cbd5e1;
+
+  background: white;
+
+  color: #0f172a;
+
+  padding: 11px 16px;
+
+  border-radius: 9px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.secondary-button:hover {
+  background: #f8fafc;
+
+  border-color: #94a3b8;
+}
+
+
+/* =========================================
+   STAT CARDS
+========================================= */
+
+.stats-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 16px;
+
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  min-width: 0;
+
+  background: white;
+
+  border: 1px solid #e7ebf1;
+
+  border-radius: 14px;
+
+  padding: 20px;
+
+  box-shadow:
+    0 2px 8px rgba(
+      15,
+      23,
+      42,
+      0.03
+    );
+}
+
+.stat-card-top {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.stat-title {
+  color: #64748b;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.stat-icon {
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+.stat-value {
+  margin-top: 14px;
+
+  color: #172033;
+
+  font-size: 25px;
+
+  font-weight: 750;
+
+  letter-spacing: -0.5px;
+}
+
+.stat-subtitle {
+  margin-top: 5px;
+
+  color: #94a3b8;
+
+  font-size: 11px;
+}
+
+
+/* =========================================
+   TWO COLUMN
+========================================= */
+
+.dashboard-two-column {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 0.9fr)
+    minmax(0, 1.1fr);
+
+  gap: 20px;
+
+  margin-bottom: 20px;
+}
+
+
+/* =========================================
+   PANELS
+========================================= */
+
+.panel,
+.credit-score-card {
+  min-width: 0;
+
+  background: white;
+
+  border: 1px solid #e7ebf1;
+
+  border-radius: 14px;
+
+  padding: 24px;
+
+  margin-bottom: 20px;
+
+  box-shadow:
+    0 2px 8px rgba(
+      15,
+      23,
+      42,
+      0.03
+    );
+}
+
+.panel-header,
+.card-heading {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  gap: 15px;
+
+  margin-bottom: 24px;
+}
+
+.panel-header h2,
+.card-heading h2 {
+  margin: 5px 0 0;
+
+  color: #172033;
+
+  font-size: 18px;
+
+  letter-spacing: -0.3px;
+}
+
+
+/* =========================================
+   CREDIT SCORE
+========================================= */
+
+.score-content {
+  display: flex;
+
+  align-items: center;
+
+  gap: 30px;
+}
+
+.score-circle {
+  width: 150px;
+  height: 150px;
+
+  position: relative;
+
+  flex-shrink: 0;
+}
+
+.score-svg {
+  width: 100%;
+  height: 100%;
+
+  transform: rotate(-90deg);
+}
+
+.score-track,
+.score-progress {
+  fill: none;
+
+  stroke-width: 9;
+}
+
+.score-track {
+  stroke: #e8eef7;
+}
+
+.score-progress {
+  stroke: #2563eb;
+
+  stroke-linecap: round;
+
+  transition:
+    stroke-dashoffset 0.5s ease;
+}
+
+.score-number {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #172033;
+
+  font-size: 29px;
+
+  font-weight: 750;
+}
+
+.score-info {
+  max-width: 280px;
+}
+
+.score-label {
+  color: #64748b;
+
+  font-size: 12px;
+}
+
+.score-status {
+  margin-top: 5px;
+
+  color: #172033;
+
+  font-size: 20px;
+
+  font-weight: 700;
+}
+
+.score-info p {
+  color: #64748b;
+
+  line-height: 1.6;
+
+  font-size: 12px;
+}
+
+.grade-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  border-radius: 20px;
+
+  padding: 6px 10px;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================
+   APPLICATION DETAILS
+========================================= */
+
+.application-details {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 22px;
+}
+
+.detail-item {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.detail-item span {
+  color: #94a3b8;
+
+  font-size: 11px;
+}
+
+.detail-item strong {
+  color: #172033;
+
+  font-size: 14px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.status-badge,
+.decision-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: fit-content;
+
+  border-radius: 20px;
+
+  padding: 5px 9px;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+.status-badge.pending,
+.decision-badge.review {
+  background: #fff7ed;
+
+  color: #c2410c;
+}
+
+.status-badge.approved,
+.decision-badge.approve {
+  background: #ecfdf5;
+
+  color: #047857;
+}
+
+.status-badge.rejected,
+.decision-badge.reject {
+  background: #fef2f2;
+
+  color: #dc2626;
+}
+
+
+/* =========================================
+   RISK
+========================================= */
+
+.risk-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.5fr)
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  gap: 20px;
+
+  margin-bottom: 25px;
+}
+
+.risk-metric {
+  padding: 15px;
+
+  background: #f8fafc;
+
+  border-radius: 10px;
+}
+
+.risk-metric span {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #64748b;
+
+  font-size: 11px;
+}
+
+.risk-metric strong {
+  color: #172033;
+
+  font-size: 20px;
+}
+
+.progress-bar {
+  height: 5px;
+
+  margin-top: 10px;
+
+  overflow: hidden;
+
+  background: #e2e8f0;
+
+  border-radius: 5px;
+}
+
+.progress-fill {
+  height: 100%;
+
+  background: #2563eb;
+
+  border-radius: 5px;
+}
+
+.risk-factors h3 {
+  margin: 0 0 12px;
+
+  color: #172033;
+
+  font-size: 13px;
+}
+
+.factor-list {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+}
+
+.factor {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 8px 10px;
+
+  border-radius: 8px;
+
+  background: #fff7ed;
+
+  color: #9a3412;
+
+  font-size: 11px;
+}
+
+.factor-dot {
+  width: 18px;
+  height: 18px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #fed7aa;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================
+   CREDIT PROFILE
+========================================= */
+
+.profile-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+.profile-item {
+  padding: 16px;
+
+  border: 1px solid #edf0f4;
+
+  border-radius: 10px;
+
+  background: #fafcff;
+}
+
+.profile-item span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #94a3b8;
+
+  font-size: 10px;
+}
+
+.profile-item strong {
+  color: #172033;
+
+  font-size: 16px;
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.table-wrapper,
+.applications-table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+.application-table,
+.applications-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  font-size: 12px;
+}
+
+.application-table th,
+.applications-table th {
+  padding: 12px 14px;
+
+  color: #94a3b8;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  text-align: left;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.04em;
+
+  border-bottom: 1px solid #edf0f4;
+
+  white-space: nowrap;
+}
+
+.application-table td,
+.applications-table td {
+  padding: 15px 14px;
+
+  color: #475569;
+
+  border-bottom: 1px solid #f1f5f9;
+
+  white-space: nowrap;
+}
+
+.application-table tbody tr:hover,
+.applications-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.application-link {
+  border: none;
+
+  background: transparent;
+
+  padding: 0;
+
+  color: #2563eb;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.application-link:hover {
+  text-decoration: underline;
+}
+
+
+/* =========================================
+   TABLE BADGES
+========================================= */
+
+.table-status,
+.decision-badge-small,
+.risk-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  padding: 5px 9px;
+
+  border-radius: 6px;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+.table-status.pending,
+.decision-badge-small.review,
+.risk-badge.medium {
+  background: #fef3c7;
+
+  color: #92400e;
+}
+
+.table-status.approved,
+.decision-badge-small.approve,
+.risk-badge.low {
+  background: #dcfce7;
+
+  color: #166534;
+}
+
+.table-status.rejected,
+.decision-badge-small.reject,
+.risk-badge.high {
+  background: #fee2e2;
+
+  color: #991b1b;
+}
+
+.not-assessed,
+.risk-na,
+.muted {
+  color: #94a3b8;
+
+  font-size: 11px;
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.empty-state,
+.applications-empty {
+  padding: 45px 20px;
+
+  color: #64748b;
+
+  text-align: center;
+}
+
+.empty-icon {
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin: 0 auto 15px;
+
+  border-radius: 12px;
+
+  background: #f1f5f9;
+
+  font-size: 22px;
+}
+
+.applications-empty h3 {
+  margin: 0 0 6px;
+
+  color: #334155;
+
+  font-size: 15px;
+}
+
+.applications-empty p {
+  margin: 0 0 18px;
+
+  font-size: 12px;
+}
+
+
+/* =========================================
+   VIEW ALL
+========================================= */
+
+.dashboard-view-all {
+  display: flex;
+
+  justify-content: center;
+
+  margin: 24px 0 40px;
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.dashboard-loading {
+  min-height: 100vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  color: #64748b;
+}
+
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+
+  border: 3px solid #e2e8f0;
+
+  border-top-color: #2563eb;
+
+  border-radius: 50%;
+
+  animation:
+    dashboard-spin 0.8s linear infinite;
+}
+
+@keyframes dashboard-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.dashboard-error {
+  min-height: 100vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 24px;
+
+  text-align: center;
+}
+
+.dashboard-error h2 {
+  margin: 0 0 10px;
+
+  color: #172033;
+}
+
+.dashboard-error p {
+  max-width: 500px;
+
+  margin: 0 0 20px;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1200px) {
+
+  .dashboard-main {
+    padding: 32px 28px;
+  }
+
+  .stats-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+@media (max-width: 1000px) {
+
+  .dashboard-two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .risk-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/*
+  IMPORTANT:
+  Your sidebar.css changes the sidebar to
+  position: relative and width: 100% at 700px.
+*/
+
+@media (max-width: 700px) {
+
+  .dashboard-main {
+    margin-left: 0;
+
+    width: 100%;
+
+    padding: 24px 16px;
+  }
+
+  .dashboard-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 18px;
+  }
+
+  .dashboard-header .primary-button {
+    width: 100%;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .application-details {
+    grid-template-columns: 1fr;
+  }
+
+  .risk-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .score-content {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+}
+
+
+@media (max-width: 450px) {
+
+  .dashboard-main {
+    padding: 20px 12px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 25px;
+  }
+
+  .panel,
+  .credit-score-card {
+    padding: 18px;
+  }
+
+}
+
