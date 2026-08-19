@@ -662,15 +662,10 @@ function formatPercentage(
     return "N/A";
   }
 
-  /*
-   * Backend may return either:
-   *
-   * 0.16  -> 16%
-   * 16    -> 16%
-   */
-
+  // Decimal fraction representation in DB (e.g. 0.24 -> 24%, 1.56 -> 156%, 4.0 -> 400%)
+  // If value is > 20, it is already in percentage format.
   const percentage =
-    number <= 1
+    number <= 10.0
       ? number * 100
       : number;
 

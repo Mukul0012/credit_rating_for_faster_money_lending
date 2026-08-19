@@ -38,6 +38,7 @@ class LoanHistoryItem(BaseModel):
     loan_tenure: int | None
     loan_purpose: str | None
     status: str | None
+    rejection_reason: str | None = None
 
     assessment_id: int | None
     prediction: int | None
@@ -95,6 +96,7 @@ class ApplicationResponse(BaseModel):
     loan_amount: float
     loan_tenure: int | None
     status: str | None
+    rejection_reason: str | None = None
 
 
 # =========================================================

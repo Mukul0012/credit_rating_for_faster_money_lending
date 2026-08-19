@@ -71,6 +71,16 @@ function Landing() {
 
           <button
             className="landing-login"
+            style={{ color: "#6366f1", fontWeight: 700 }}
+            onClick={() =>
+              navigate("/lender/login")
+            }
+          >
+            🏛️ Lender Portal
+          </button>
+
+          <button
+            className="landing-login"
             onClick={() =>
               navigate("/login")
             }
@@ -464,6 +474,24 @@ function Landing() {
           Intelligent credit assessment
           for faster lending decisions.
         </p>
+
+        <div style={{ marginTop: "12px" }}>
+          <button
+            onClick={() => navigate("/lender/login")}
+            style={{
+              background: "transparent",
+              border: "1px solid #cbd5e1",
+              color: "#6366f1",
+              fontSize: "11px",
+              padding: "5px 12px",
+              borderRadius: "6px",
+              cursor: "pointer",
+              fontWeight: 600
+            }}
+          >
+            Institutional Underwriter & Lender Portal →
+          </button>
+        </div>
 
       </footer>
 

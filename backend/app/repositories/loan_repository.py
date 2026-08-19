@@ -7,6 +7,8 @@ from app.models.application import Application
 from app.models.loan_request import LoanRequest
 from app.models.credit_rating import CreditRating
 from app.models.loan_assessment import LoanAssessment
+from app.models.credit_profile import CreditProfile
+from app.models.debt_payment_metrics import DebtPaymentMetrics
 
 
 class LoanRepository:
@@ -169,6 +171,70 @@ class LoanRepository:
         db.flush()
 
         return assessment
+
+    @staticmethod
+    def create_credit_profile(
+        db: Session,
+        application_id: int,
+        annual_income: Decimal | None = None,
+        employment_type: str | None = None,
+        employment_duration: int | None = None,
+        number_of_dependents: int | None = None,
+        debt_to_income_ratio: Decimal | None = None,
+        credit_utilization: Decimal | None = None,
+        previous_defaults: int | None = None,
+        missed_payments: int | None = None,
+        maximum_days_past_due: int | None = None,
+        recent_credit_enquiries: int | None = None,
+        number_of_credit_accounts: int | None = None,
+        credit_history_length: int | None = None,
+        payment_history: Decimal | None = None,
+        loan_to_income_ratio: Decimal | None = None
+    ) -> CreditProfile:
+
+        profile = CreditProfile(
+            application_id=application_id,
+            annual_income=annual_income,
+            employment_type=employment_type,
+            employment_duration=employment_duration,
+            number_of_dependents=number_of_dependents,
+            debt_to_income_ratio=debt_to_income_ratio,
+            credit_utilization=credit_utilization,
+            previous_defaults=previous_defaults,
+            missed_payments=missed_payments,
+            maximum_days_past_due=maximum_days_past_due,
+            recent_credit_enquiries=recent_credit_enquiries,
+            number_of_credit_accounts=number_of_credit_accounts,
+            credit_history_length=credit_history_length,
+            payment_history=payment_history,
+            loan_to_income_ratio=loan_to_income_ratio
+        )
+
+        db.add(profile)
+        db.flush()
+
+        return profile
+
+    @staticmethod
+    def create_debt_payment_metrics(
+        db: Session,
+        loan_request_id: int,
+        existing_loans_count: int | None = None,
+        total_outstanding_debt: Decimal | None = None,
+        monthly_emi: Decimal | None = None
+    ) -> DebtPaymentMetrics:
+
+        metrics = DebtPaymentMetrics(
+            loan_request_id=loan_request_id,
+            existing_loans_count=existing_loans_count,
+            total_outstanding_debt=total_outstanding_debt,
+            monthly_emi=monthly_emi
+        )
+
+        db.add(metrics)
+        db.flush()
+
+        return metrics
 
     @staticmethod
     def get_application_details(

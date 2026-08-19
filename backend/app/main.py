@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from sqlalchemy import text
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.core.database import engine
+from app.core.database import engine, Base
 
 # Import models so SQLAlchemy knows about them
 from app import models
@@ -22,6 +22,13 @@ from app.routers.auth import (
 from app.routers.loan import (
     router as loan_router
 )
+
+from app.routers.lender import (
+    router as lender_router
+)
+
+# Ensure all database tables exist
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Credit Risk Assessment API",
@@ -58,6 +65,10 @@ app.include_router(
 
 app.include_router(
     loan_router
+)
+
+app.include_router(
+    lender_router
 )
 
 @app.get("/")

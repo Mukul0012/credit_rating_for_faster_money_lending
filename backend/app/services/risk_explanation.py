@@ -5,6 +5,40 @@ def get_risk_factors(
     factors = []
 
     # =====================================================
+    # Loan-to-income ratio (LTI)
+    # =====================================================
+
+    lti = customer.get(
+        "Loan_to_Income_Ratio"
+    )
+
+    if lti is not None and lti > 200:
+        factors.append(
+            f"Excessive loan-to-income ratio ({lti:.1f}%): requested loan exceeds safe annual income limits"
+        )
+    elif lti is not None and lti > 100:
+        factors.append(
+            f"High loan-to-income ratio ({lti:.1f}%)"
+        )
+
+    # =====================================================
+    # Debt-to-income ratio (DTI)
+    # =====================================================
+
+    dti = customer.get(
+        "Debt_to_Income_Ratio"
+    )
+
+    if dti is not None and dti > 60:
+        factors.append(
+            f"Critical debt-to-income ratio ({dti:.1f}%): monthly repayment burden exceeds sustainable threshold"
+        )
+    elif dti is not None and dti > 40:
+        factors.append(
+            f"High debt-to-income ratio ({dti:.1f}%)"
+        )
+
+    # =====================================================
     # Credit score
     # =====================================================
 
@@ -17,39 +51,7 @@ def get_risk_factors(
         and credit_score < 650
     ):
         factors.append(
-            "Low credit score"
-        )
-
-    # =====================================================
-    # Debt-to-income ratio
-    # =====================================================
-
-    dti = customer.get(
-        "Debt_to_Income_Ratio"
-    )
-
-    if (
-        dti is not None
-        and dti > 40
-    ):
-        factors.append(
-            "High debt-to-income ratio"
-        )
-
-    # =====================================================
-    # Credit utilization
-    # =====================================================
-
-    utilization = customer.get(
-        "Credit_Utilization"
-    )
-
-    if (
-        utilization is not None
-        and utilization > 70
-    ):
-        factors.append(
-            "High credit utilization"
+            f"Low credit score ({credit_score})"
         )
 
     # =====================================================
@@ -65,7 +67,23 @@ def get_risk_factors(
         and previous_defaults > 0
     ):
         factors.append(
-            "Previous loan defaults"
+            "Previous loan defaults on record"
+        )
+
+    # =====================================================
+    # Credit utilization
+    # =====================================================
+
+    utilization = customer.get(
+        "Credit_Utilization"
+    )
+
+    if (
+        utilization is not None
+        and utilization > 70
+    ):
+        factors.append(
+            f"High credit utilization ({utilization:.1f}%)"
         )
 
     # =====================================================
@@ -81,7 +99,7 @@ def get_risk_factors(
         and missed_payments > 2
     ):
         factors.append(
-            "Multiple missed payments"
+            "Multiple missed payments in credit history"
         )
 
     # =====================================================
@@ -97,7 +115,7 @@ def get_risk_factors(
         and maximum_days_past_due > 30
     ):
         factors.append(
-            "High payment delinquency"
+            "High payment delinquency (> 30 days past due)"
         )
 
     # =====================================================
@@ -116,5 +134,4 @@ def get_risk_factors(
             "Multiple recent credit enquiries"
         )
 
-    # Original project returns maximum 3 factors
-    return factors[:3]
+    return factors[:4]

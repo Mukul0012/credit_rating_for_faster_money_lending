@@ -62,6 +62,9 @@ class LoanService:
                 "status":
                     application.status,
 
+                "rejection_reason":
+                    application.rejection_reason,
+
                 "assessment_id":
                     (
                         assessment.assessment_id
@@ -506,7 +509,10 @@ class LoanService:
                     application.loan_tenure,
 
                 "status":
-                    application.status
+                    application.status,
+
+                "rejection_reason":
+                    application.rejection_reason
             },
 
 

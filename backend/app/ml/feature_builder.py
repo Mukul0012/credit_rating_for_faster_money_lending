@@ -123,6 +123,83 @@ class FeatureBuilder:
             )
 
         # =====================================================
+        # EXTRACT AMOUNTS & COMPUTE DYNAMIC RATIOS
+        # =====================================================
+
+        annual_income = FeatureBuilder._number(
+            employment.get("annual_income")
+        )
+
+        loan_amount = FeatureBuilder._number(
+            loan_data.loan_amount
+        )
+
+        loan_tenure = FeatureBuilder._number(
+            loan_data.loan_tenure
+        )
+
+        existing_loans_count = FeatureBuilder._number(
+            debt_metrics.get("existing_loans_count"),
+            default=0
+        )
+
+        existing_debt = FeatureBuilder._number(
+            debt_metrics.get("total_outstanding_debt"),
+            default=0.0
+        )
+
+        existing_emi = FeatureBuilder._number(
+            debt_metrics.get("monthly_emi"),
+            default=0.0
+        )
+
+        # -----------------------------------------------------
+        # 1. Dynamic Loan-to-Income Ratio (LTI %)
+        # -----------------------------------------------------
+        if annual_income and annual_income > 0:
+            loan_to_income_ratio = round(
+                (loan_amount / annual_income) * 100.0,
+                2
+            )
+        else:
+            loan_to_income_ratio = 0.0
+
+        # -----------------------------------------------------
+        # 2. Dynamic Debt-to-Income Ratio (DTI %)
+        # Monthly Income = Annual Income / 12
+        # New Loan EMI is estimated with standard amortization (10.5% p.a.)
+        # -----------------------------------------------------
+        monthly_income = (
+            (annual_income / 12.0)
+            if annual_income and annual_income > 0
+            else 1.0
+        )
+
+        if loan_tenure and loan_tenure > 0:
+            r = 0.105 / 12.0
+            new_monthly_emi = (
+                loan_amount * r * ((1.0 + r) ** loan_tenure)
+                / (((1.0 + r) ** loan_tenure) - 1.0)
+            )
+        else:
+            new_monthly_emi = float(loan_amount)
+
+        # If existing EMI is not explicitly recorded but historical DTI exists
+        hist_dti = FeatureBuilder._percentage(
+            credit_profile.get("debt_to_income_ratio")
+        )
+        if existing_emi == 0.0 and hist_dti > 0:
+            existing_emi = (hist_dti / 100.0) * monthly_income
+
+        total_monthly_emi = existing_emi + new_monthly_emi
+        debt_to_income_ratio = round(
+            (total_monthly_emi / monthly_income) * 100.0,
+            2
+        )
+
+        total_outstanding_debt = existing_debt + loan_amount
+
+        # =====================================================
         # BUILD FLAT ML FEATURES
         # =====================================================
 
@@ -144,11 +221,7 @@ class FeatureBuilder:
             # -------------------------------------------------
 
             "Annual_Income":
-                FeatureBuilder._number(
-                    employment.get(
-                        "annual_income"
-                    )
-                ),
+                annual_income,
 
             "Employment_Duration_Years":
                 FeatureBuilder._number(
@@ -163,7 +236,7 @@ class FeatureBuilder:
                 ),
 
             # -------------------------------------------------
-            # CREDIT PROFILE
+            # CREDIT PROFILE & DYNAMIC RATIOS
             # -------------------------------------------------
 
             "Number_of_Dependents":
@@ -174,18 +247,10 @@ class FeatureBuilder:
                 ),
 
             "Debt_to_Income_Ratio":
-                FeatureBuilder._percentage(
-                    credit_profile.get(
-                        "debt_to_income_ratio"
-                    )
-                ),
+                debt_to_income_ratio,
 
             "Loan_to_Income_Ratio":
-                FeatureBuilder._percentage(
-                    credit_profile.get(
-                        "loan_to_income_ratio"
-                    )
-                ),
+                loan_to_income_ratio,
 
             "Credit_Utilization":
                 FeatureBuilder._percentage(
@@ -255,43 +320,27 @@ class FeatureBuilder:
                 ),
 
             # -------------------------------------------------
-            # EXISTING DEBT
+            # EXISTING & TOTAL DEBT
             # -------------------------------------------------
 
             "Existing_Loans_Count":
-                FeatureBuilder._number(
-                    debt_metrics.get(
-                        "existing_loans_count"
-                    )
-                ),
+                existing_loans_count,
 
             "Total_Outstanding_Debt":
-                FeatureBuilder._number(
-                    debt_metrics.get(
-                        "total_outstanding_debt"
-                    )
-                ),
+                total_outstanding_debt,
 
             "Existing_Monthly_EMI":
-                FeatureBuilder._number(
-                    debt_metrics.get(
-                        "monthly_emi"
-                    )
-                ),
+                existing_emi,
 
             # -------------------------------------------------
             # NEW LOAN
             # -------------------------------------------------
 
             "Loan_Amount":
-                FeatureBuilder._number(
-                    loan_data.loan_amount
-                ),
+                loan_amount,
 
             "Loan_Tenure_Months":
-                FeatureBuilder._number(
-                    loan_data.loan_tenure
-                ),
+                loan_tenure,
 
             "Loan_Purpose":
                 loan_data.loan_purpose

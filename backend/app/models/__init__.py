@@ -8,6 +8,7 @@ from app.models.existing_loan import ExistingLoan
 from app.models.loan_request import LoanRequest
 from app.models.loan_assessment import LoanAssessment
 from app.models.user_account import UserAccount
+from app.models.lender_account import LenderAccount
 
 __all__ = [
     "Applicant",
@@ -19,5 +20,6 @@ __all__ = [
     "ExistingLoan",
     "LoanRequest",
     "UserAccount",
-    "LoanAssessment"
+    "LoanAssessment",
+    "LenderAccount"
 ]

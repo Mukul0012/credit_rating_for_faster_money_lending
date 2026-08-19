@@ -526,6 +526,104 @@
 }
 
 .status-badge.pending {
-  background: #f1f5f9;
-  color: #64748b;
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* =========================================
+   STATUS BANNERS
+========================================= */
+
+.rejection-banner {
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  border-left: 5px solid #e53e3e;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 8px rgba(229, 62, 62, 0.06);
+}
+
+.rejection-banner-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.rejection-banner-icon {
+  width: 24px;
+  height: 24px;
+  background: #feb2b2;
+  color: #9b2c2c;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.rejection-banner-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #9b2c2c;
+}
+
+.rejection-banner-reason {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #4a5568;
+  line-height: 1.5;
+  padding-left: 34px;
+}
+
+.rejection-banner-tip {
+  margin: 0;
+  font-size: 12px;
+  color: #718096;
+  padding-left: 34px;
+}
+
+.pending-review-banner {
+  background: #fffdf5;
+  border: 1px solid #fef3c7;
+  border-left: 5px solid #f59e0b;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.06);
+}
+
+.pending-review-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.pending-review-icon {
+  width: 24px;
+  height: 24px;
+  background: #fde68a;
+  color: #92400e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+.pending-review-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #92400e;
+}
+
+.pending-review-desc {
+  margin: 0;
+  font-size: 13px;
+  color: #78350f;
+  line-height: 1.5;
+  padding-left: 34px;
 }

@@ -20,6 +20,7 @@ function ApplyLoan() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [submittedData, setSubmittedData] = useState(null);
 
 
   // =========================================
@@ -200,25 +201,21 @@ function ApplyLoan() {
 
 
       // =====================================
-      // REDIRECT
+      // SET SUBMISSION DATA
       // =====================================
 
-      /*
-       * Do NOT pass assessment data through
-       * React Router state.
-       *
-       * ApplicationDetails.jsx will fetch
-       * fresh data from:
-       *
-       * GET /api/loan/application/{id}
-       */
+      const status =
+        result?.risk_assessment?.decision === "APPROVE"
+          ? "Approved"
+          : result?.risk_assessment?.decision === "REJECT"
+          ? "Rejected"
+          : "Pending";
 
-      navigate(
-        `/application/${applicationId}`,
-        {
-          replace: true
-        }
-      );
+      setSubmittedData({
+        applicationId,
+        status,
+        result
+      });
 
 
     } catch (err) {
@@ -239,6 +236,138 @@ function ApplyLoan() {
       setLoading(false);
 
     }
+
+  }
+
+
+  // =========================================
+  // WAITING / SUBMITTED SCREEN
+  // =========================================
+
+  if (submittedData) {
+
+    const isApproved =
+      submittedData.status === "Approved";
+
+    const isRejected =
+      submittedData.status === "Rejected";
+
+    return (
+
+      <div className="apply-loan-page">
+
+        <div className="apply-loan-container">
+
+          <div className="apply-waiting-card">
+
+            <div
+              className={
+                `waiting-icon-wrapper ${
+                  isApproved
+                    ? "approved"
+                    : isRejected
+                    ? "rejected"
+                    : ""
+                }`
+              }
+            >
+              {isApproved
+                ? "✓"
+                : isRejected
+                ? "✕"
+                : "⌛"}
+            </div>
+
+
+            <h2>
+              {isApproved
+                ? "Loan Application Approved!"
+                : isRejected
+                ? "Application Evaluated"
+                : "Application Submitted & Under Review"}
+            </h2>
+
+
+            <p>
+              {isApproved
+                ? "Your credit assessment meets our pre-approval requirements. Your loan has been sanctioned."
+                : isRejected
+                ? "Your application has been evaluated. Review the detailed risk analysis and recommendations."
+                : "Your loan application has been placed in the lender review queue. An underwriter will assess your credit profile shortly."}
+            </p>
+
+
+            <div className="waiting-meta-box">
+
+              <div className="waiting-meta-item">
+                <span>Application ID</span>
+                <strong>
+                  #{submittedData.applicationId}
+                </strong>
+              </div>
+
+              <div className="waiting-meta-item">
+                <span>Loan Amount</span>
+                <strong>
+                  ₹{Number(form.loan_amount).toLocaleString("en-IN")}
+                </strong>
+              </div>
+
+              <div className="waiting-meta-item">
+                <span>Status</span>
+                <strong
+                  style={{
+                    color:
+                      isApproved
+                        ? "#16a34a"
+                        : isRejected
+                        ? "#dc2626"
+                        : "#d97706"
+                  }}
+                >
+                  {submittedData.status}
+                </strong>
+              </div>
+
+            </div>
+
+
+            <div className="waiting-actions">
+
+              <button
+                type="button"
+                className="assess-button"
+                style={{ width: "auto", padding: "12px 24px" }}
+                onClick={() =>
+                  navigate(
+                    `/application/${submittedData.applicationId}`
+                  )
+                }
+              >
+                View Assessment Details →
+              </button>
+
+
+              <button
+                type="button"
+                className="back-button"
+                style={{ margin: 0, padding: "12px 18px", border: "1px solid #cbd5e1", borderRadius: "8px" }}
+                onClick={() =>
+                  navigate("/dashboard")
+                }
+              >
+                Back to Dashboard
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    );
 
   }
 

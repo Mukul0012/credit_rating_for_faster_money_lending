@@ -1,7 +1,10 @@
 # Virtual environment
 venv/
-
-# Environment variables
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
 .env
 
 # Python

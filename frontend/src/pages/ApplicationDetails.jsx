@@ -352,6 +352,39 @@ function ApplicationDetails() {
 
 
         {/* =================================
+            STATUS BANNERS
+        ================================= */}
+
+        {application.status === "Rejected" && (
+          <div className="rejection-banner">
+            <div className="rejection-banner-header">
+              <div className="rejection-banner-icon">✕</div>
+              <div className="rejection-banner-title">Application Declined</div>
+            </div>
+            <p className="rejection-banner-reason">
+              <strong>Reason: </strong>
+              {application.rejection_reason || "Your application did not meet the required credit risk criteria."}
+            </p>
+            <p className="rejection-banner-tip">
+              Tip: You may improve your approval odds by reducing existing outstanding debt, maintaining on-time EMI repayments, or applying for a lower loan amount.
+            </p>
+          </div>
+        )}
+
+        {(application.status === "Pending" || application.status === "Under Review") && (
+          <div className="pending-review-banner">
+            <div className="pending-review-header">
+              <div className="pending-review-icon">⌛</div>
+              <div className="pending-review-title">Under Review by Lender</div>
+            </div>
+            <p className="pending-review-desc">
+              Your application has been received and is currently in the underwriter queue for evaluation. You will be notified as soon as a lending decision has been finalized.
+            </p>
+          </div>
+        )}
+
+
+        {/* =================================
             LOAN DETAILS
         ================================= */}
 

@@ -5,7 +5,8 @@ from sqlalchemy import (
     ForeignKey,
     Integer,
     Numeric,
-    String
+    String,
+    Text
 )
 
 from sqlalchemy.orm import relationship
@@ -56,11 +57,29 @@ class Application(Base):
         nullable=True
     )
 
+    rejection_reason = Column(
+        Text,
+        nullable=True
+    )
+
+    reviewed_by = Column(
+        BigInteger,
+        ForeignKey(
+            "lender_account.lender_id"
+        ),
+        nullable=True
+    )
+
     # Relationships
 
     applicant = relationship(
         "Applicant",
         back_populates="applications"
+    )
+
+    reviewer = relationship(
+        "LenderAccount",
+        foreign_keys=[reviewed_by]
     )
 
     credit_profiles = relationship(

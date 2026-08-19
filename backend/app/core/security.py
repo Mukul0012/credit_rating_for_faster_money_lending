@@ -72,6 +72,31 @@ def create_access_token(
     )
 
 
+def create_lender_token(
+    lender_id: int
+) -> str:
+
+    expire = (
+        datetime.now(timezone.utc)
+        +
+        timedelta(
+            minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+        )
+    )
+
+    payload = {
+        "sub": str(lender_id),
+        "role": "lender",
+        "exp": expire
+    }
+
+    return jwt.encode(
+        payload,
+        settings.JWT_SECRET,
+        algorithm=settings.JWT_ALGORITHM
+    )
+
+
 # =========================================================
 # HTTP Bearer Authentication
 # =========================================================
@@ -112,6 +137,49 @@ def get_current_applicant(
             raise credentials_exception
 
         return int(applicant_id)
+
+    except (
+        JWTError,
+        ValueError
+    ):
+
+        raise credentials_exception
+
+
+def get_current_lender(
+    credentials: HTTPAuthorizationCredentials = Depends(
+        bearer_scheme
+    )
+) -> int:
+
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Invalid or expired lender authentication token",
+        headers={
+            "WWW-Authenticate": "Bearer"
+        }
+    )
+
+    token = credentials.credentials
+
+    try:
+
+        payload = jwt.decode(
+            token,
+            settings.JWT_SECRET,
+            algorithms=[
+                settings.JWT_ALGORITHM
+            ]
+        )
+
+        lender_id = payload.get("sub")
+        role = payload.get("role")
+
+        if lender_id is None or role != "lender":
+
+            raise credentials_exception
+
+        return int(lender_id)
 
     except (
         JWTError,

@@ -1,3 +1,4 @@
+from decimal import Decimal
 from sqlalchemy.orm import Session
 
 from app.services.applicant_service import (
@@ -28,7 +29,7 @@ from app.ml.predictor import (
 class RiskService:
 
     # =========================================================
-    # CALCULATE RISK
+    # CALCULATE RISK & APPLY UNDERWRITING POLICY
     # =========================================================
 
     @staticmethod
@@ -40,29 +41,70 @@ class RiskService:
         # Model class 1 = Approve
         # Model class 0 = Reject
         #
-        # Therefore:
         # P(1) = approval probability
-        #
-        # Risk score is inverse of approval probability.
+        # Base risk score from ML model
+        raw_risk_score = (
+            1.0 - probability
+        ) * 100.0
 
-        risk_score = (
-            1 - probability
-        ) * 100
+        # Financial health metrics for underwriting policy validation
+        lti = float(features.get("Loan_to_Income_Ratio", 0.0) or 0.0)
+        dti = float(features.get("Debt_to_Income_Ratio", 0.0) or 0.0)
+        credit_score = int(features.get("Credit_Score", 700) or 700)
+        previous_defaults = int(features.get("Previous_Defaults", 0) or 0)
+        missed_payments = int(features.get("Missed_Payments", 0) or 0)
+        max_dpd = int(features.get("Maximum_Days_Past_Due", 0) or 0)
 
-        if risk_score <= 30:
-
-            risk_level = "LOW"
-            decision = "APPROVE"
-
-        elif risk_score <= 60:
-
-            risk_level = "MEDIUM"
-            decision = "REVIEW"
-
-        else:
-
+        # -----------------------------------------------------
+        # 1. Critical High Risk / Reject (Auto-Reject):
+        #    - Unrealistic loan amount: Loan > 2.5x annual income (LTI > 250%)
+        #    - Severe debt burden: Total EMI > 70% of monthly income (DTI > 70%)
+        #    - Previous loan defaults on record (> 0)
+        #    - High payment delinquency (DPD > 60)
+        #    - Severely low credit score (< 580)
+        #    - Model risk score > 60 (approval probability < 40%)
+        # -----------------------------------------------------
+        if (
+            raw_risk_score > 60.0
+            or lti > 250.0
+            or dti > 70.0
+            or previous_defaults > 0
+            or max_dpd > 60
+            or credit_score < 580
+        ):
             risk_level = "HIGH"
             decision = "REJECT"
+            risk_score = max(raw_risk_score, 65.0)
+
+        # -----------------------------------------------------
+        # 2. Medium Risk / Manual Underwriter Review (Lender Queue):
+        #    - Moderately high LTI (100% < LTI <= 250%)
+        #    - Moderately high DTI (40% < DTI <= 70%)
+        #    - Subprime credit score (580 <= credit_score < 700)
+        #    - Multiple missed payments (> 1)
+        #    - Model risk score between 30 and 60
+        # -----------------------------------------------------
+        elif (
+            raw_risk_score > 30.0
+            or lti > 100.0
+            or dti > 40.0
+            or credit_score < 700
+            or missed_payments > 1
+        ):
+            risk_level = "MEDIUM"
+            decision = "REVIEW"
+            risk_score = max(raw_risk_score, 35.0)
+
+        # -----------------------------------------------------
+        # 3. Low Risk / Auto-Approve:
+        #    - Clean credit history (score >= 700, 0 defaults, <= 1 missed payment)
+        #    - Safe debt ratios (LTI <= 100%, DTI <= 40%)
+        #    - High ML approval probability (risk score <= 30)
+        # -----------------------------------------------------
+        else:
+            risk_level = "LOW"
+            decision = "APPROVE"
+            risk_score = raw_risk_score
 
         return {
 
@@ -407,18 +449,21 @@ class RiskService:
             if decision == "APPROVE":
 
                 application.status = "Approved"
-
-            elif decision == "REVIEW":
-
-                application.status = "Under Review"
+                application.rejection_reason = None
 
             elif decision == "REJECT":
 
                 application.status = "Rejected"
+                risk_factors = risk_assessment.get("risk_factors", [])
+                if risk_factors:
+                    application.rejection_reason = "; ".join(risk_factors)
+                else:
+                    application.rejection_reason = "Application exceeded maximum risk threshold based on financial profile."
 
             else:
 
                 application.status = "Pending"
+                application.rejection_reason = None
 
 
             # =================================================
@@ -464,6 +509,165 @@ class RiskService:
 
                     risk_grade=
                         historical_credit_rating.risk_grade
+                )
+            )
+
+
+            # =================================================
+            # 14b. CREATE CREDIT PROFILE SNAPSHOT
+            # =================================================
+
+            lti_decimal = Decimal(
+                str(
+                    round(
+                        features.get(
+                            "Loan_to_Income_Ratio",
+                            0.0
+                        ) / 100.0,
+                        4
+                    )
+                )
+            )
+
+            dti_decimal = Decimal(
+                str(
+                    round(
+                        features.get(
+                            "Debt_to_Income_Ratio",
+                            0.0
+                        ) / 100.0,
+                        4
+                    )
+                )
+            )
+
+            util_decimal = Decimal(
+                str(
+                    round(
+                        features.get(
+                            "Credit_Utilization",
+                            0.0
+                        ) / 100.0,
+                        4
+                    )
+                )
+            )
+
+            pay_hist_decimal = Decimal(
+                str(
+                    round(
+                        features.get(
+                            "Payment_History",
+                            100.0
+                        ) / 100.0,
+                        4
+                    )
+                )
+            )
+
+            LoanRepository.create_credit_profile(
+                db=db,
+                application_id=application_id,
+                annual_income=Decimal(
+                    str(
+                        features.get(
+                            "Annual_Income",
+                            0
+                        )
+                    )
+                ),
+                employment_type=features.get(
+                    "Employment_Type"
+                ),
+                employment_duration=int(
+                    features.get(
+                        "Employment_Duration_Years",
+                        0
+                    )
+                ),
+                number_of_dependents=int(
+                    features.get(
+                        "Number_of_Dependents",
+                        0
+                    )
+                ),
+                debt_to_income_ratio=dti_decimal,
+                credit_utilization=util_decimal,
+                previous_defaults=int(
+                    features.get(
+                        "Previous_Defaults",
+                        0
+                    )
+                ),
+                missed_payments=int(
+                    features.get(
+                        "Missed_Payments",
+                        0
+                    )
+                ),
+                maximum_days_past_due=int(
+                    features.get(
+                        "Maximum_Days_Past_Due",
+                        0
+                    )
+                ),
+                recent_credit_enquiries=int(
+                    features.get(
+                        "Recent_Credit_Enquiries",
+                        0
+                    )
+                ),
+                number_of_credit_accounts=int(
+                    features.get(
+                        "Number_of_Credit_Accounts",
+                        0
+                    )
+                ),
+                credit_history_length=int(
+                    features.get(
+                        "Credit_History_Length",
+                        0
+                    )
+                ),
+                payment_history=pay_hist_decimal,
+                loan_to_income_ratio=lti_decimal
+            )
+
+
+            # =================================================
+            # 14c. CREATE DEBT PAYMENT METRICS SNAPSHOT
+            # =================================================
+
+            LoanRepository.create_debt_payment_metrics(
+                db=db,
+                loan_request_id=loan_request.loan_request_id,
+                existing_loans_count=int(
+                    features.get(
+                        "Existing_Loans_Count",
+                        0
+                    )
+                ),
+                total_outstanding_debt=Decimal(
+                    str(
+                        round(
+                            features.get(
+                                "Total_Outstanding_Debt",
+                                0.0
+                            ),
+                            2
+                        )
+                    )
+                ),
+                monthly_emi=Decimal(
+                    str(
+                        round(
+                            features.get(
+                                "Existing_Monthly_EMI",
+                                0.0
+                            ),
+                            2
+                        )
+                    )
                 )
             )
 

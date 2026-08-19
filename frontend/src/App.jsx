@@ -6,52 +6,34 @@ import {
 } from "react-router-dom";
 
 
-import Landing
-  from "./pages/Landing";
+import Landing from "./pages/Landing";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import ApplyLoan from "./pages/ApplyLoan";
+import ApplicationDetails from "./pages/ApplicationDetails";
+import LoanHistory from "./pages/LoanHistory";
+import CreditProfile from "./pages/CreditProfile";
+import LenderLogin from "./pages/LenderLogin";
+import LenderDashboard from "./pages/LenderDashboard";
+import LenderReview from "./pages/LenderReview";
 
-import Login
-  from "./pages/Login";
-
-import Register
-  from "./pages/Register";
-
-import Dashboard
-  from "./pages/Dashboard";
-
-import ApplyLoan
-  from "./pages/ApplyLoan";
-
-import ApplicationDetails
-  from "./pages/ApplicationDetails";
-
-import LoanHistory
-  from "./pages/LoanHistory";
-
-import CreditProfile
-  from "./pages/CreditProfile";
-
-import {
-  isAuthenticated
-} from "./services/auth";
+import { isAuthenticated } from "./services/auth";
+import { isLenderAuthenticated } from "./services/lenderAuth";
 
 
-function ProtectedRoute({
-  children
-}) {
-
+function ProtectedRoute({ children }) {
   if (!isAuthenticated()) {
-
-    return (
-      <Navigate
-        to="/login"
-        replace
-      />
-    );
-
+    return <Navigate to="/login" replace />;
   }
-
   return children;
+}
 
+function LenderProtectedRoute({ children }) {
+  if (!isLenderAuthenticated()) {
+    return <Navigate to="/lender/login" replace />;
+  }
+  return children;
 }
 
 
@@ -63,28 +45,52 @@ function App() {
 
       <Routes>
 
-
-        {/* PUBLIC */}
+        {/* CUSTOMER PUBLIC */}
 
         <Route
           path="/"
           element={<Landing />}
         />
 
-
         <Route
           path="/login"
           element={<Login />}
         />
-
 
         <Route
           path="/register"
           element={<Register />}
         />
 
+        {/* LENDER PUBLIC */}
 
-        {/* PROTECTED */}
+        <Route
+          path="/lender/login"
+          element={<LenderLogin />}
+        />
+
+        {/* LENDER PROTECTED */}
+
+        <Route
+          path="/lender/dashboard"
+          element={
+            <LenderProtectedRoute>
+              <LenderDashboard />
+            </LenderProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/lender/review/:applicationId"
+          element={
+            <LenderProtectedRoute>
+              <LenderReview />
+            </LenderProtectedRoute>
+          }
+        />
+
+
+        {/* CUSTOMER PROTECTED */}
 
         <Route
           path="/dashboard"
@@ -95,7 +101,6 @@ function App() {
           }
         />
 
-
         <Route
           path="/apply-loan"
           element={
@@ -104,7 +109,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
 
         <Route
           path="/loan-history"
@@ -115,7 +119,6 @@ function App() {
           }
         />
 
-
         <Route
           path="/credit-profile"
           element={
@@ -124,7 +127,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
 
         <Route
           path="/application/:applicationId"
